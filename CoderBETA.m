@@ -1,6 +1,6 @@
 clear all;
 close all;
-%Posibles mensajes de entrada %Introducido arduino
+%Posibles mensajes de entrada
 M = [0 0 0; 
      0 0 1;
      0 1 0;
@@ -8,10 +8,10 @@ M = [0 0 0;
      1 0 0;
      1 0 1;
      1 1 0;
-     1 1 1];
-%Mensaje a codificar   %Mensaje a codificar entradas logicas
-m = [0 0 1];
-%Matriz Generadora  
+     1 1 1]
+%Mensaje a codificar
+m = [0 1 1];
+%Matriz Generadora
 G = [1 0 0 1 0 1;
      0 1 0 0 1 1;
      0 0 1 1 1 0];
@@ -56,7 +56,7 @@ e = [0 0 0 0 0 0;
      0 0 1 0 0 1;
      0 1 0 1 0 0]
  
-S = mod(e*Htran,2)  
+S = mod(e*Htran,2)
 %Arreglo Standar 
 SA000 = [mod(U(1,:)+e(1,:),2);
          mod(U(2,:)+e(1,:),2);
@@ -148,20 +148,18 @@ SA111c = [mod(U(1,:)+e(10,:),2);
          mod(U(7,:)+e(10,:),2);
          mod(U(8,:)+e(10,:),2)];   
 
-longi = length(SA111a)
-msgPrueba = [0 1 1 1 0 1];
-y = [1 1 1 1 1 1];
+%msgPrueba = [0     0     1     1     1     0];
+y = [0     0     0     0    0     1];
+
+%DECODER========
 
 %Error aleatorio
 %y = [1 0 1 1 0 0]
 %Verificacion de Paridad (palabra decodificad)
-UHtran2 = mod(y*Htran,2)
+%UHtran2 = mod(y*Htran,2)
 errorDoble = 0; %para indicar que se encontró error doble en arreglo
-%=== DECODER ===$
 
 Sx = mod(y*Htran,2)
-
-
 
 if Sx == S(2,:)
     ex = SA001(1,:)
@@ -177,14 +175,14 @@ elseif Sx == S(7,:)
     ex = SA101(1,:)
 elseif Sx == S(8,:)   
 %Primer error doble
-    if msgPrueba(1,1) ~= y(1, 1) && msgPrueba(1,5) ~= y(1, 5)
+    if u(1,1) ~= y(1, 1) && u(1,5) ~= y(1, 5)
         ex = SA111a(1,:)
     end
     %Segundo error doble
-    if msgPrueba(1,3) ~= y(1, 3) && msgPrueba(1,6) ~= y(1, 6)
+    if u(1,3) ~= y(1, 3) && u(1,6) ~= y(1, 6)
         ex = SA111b(1,:)
     end
-    if msgPrueba(1,2) ~= y(1, 2) && msgPrueba(1,4) ~= y(1, 4)
+    if u(1,2) ~= y(1, 2) && u(1,4) ~= y(1, 4)
         ex = SA111c(1,:)
     end
 end
